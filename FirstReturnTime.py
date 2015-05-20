@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 import random
 
-k = 5  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
+k = 2  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobieństwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
 print(entropy)
@@ -26,15 +26,12 @@ print(seq)
 t = seq.count(1) / Max_Block  # prawdopodobienstwo '1' w bloku
 print(t)
 
-''' Policzmy czas pierwszego powrotu '''
 R = list()
+k = 1
+R.append(k)
 for n in range(0, Max_Block):
-    k = 1
-    tempSum = 0
-    for j in range(0, n):
-        tempSum = abs(x[j] - x[j + k])
-        if tempSum > 0:
-            k += 1
+    if x[n] != x[n+1]:
+        k += 1
     R.append(k)
 print(R)
 
@@ -42,5 +39,9 @@ g1 = {i: abs(math.log(R[i - 1] / i, 2.)) for i in range(1, Max_Block + 1)}
 print(g1)
 
 plt.plot(np.arange(1, Max_Block + 1, 1), list(g1.values()))
-plt.plot([1, Max_Block], [entropy, entropy], 'k-', lw=2)
+plt.axhline(entropy, lw=2, color='black', label=str(entropy))
+plt.suptitle(''.join(str(b) for b in seq), fontsize=10)
+plt.ylabel('entropia')
+plt.xlabel('n')
+plt.legend()
 plt.savefig('foo.png')
