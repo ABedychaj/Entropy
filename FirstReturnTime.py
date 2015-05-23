@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 import random
 
-k = 2  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
+k = 1  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobieństwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
 print(entropy)
@@ -15,7 +15,7 @@ print(N)
 
 x = list()  # generowanie ciągu Bernulliego
 for i in range(1, N + 1):
-    x.append(math.trunc(random.randint(1, k) / k))
+    x.append(math.trunc(random.randint(0, k) / k))
 
 t = x.count(1) / N  # prawdopodobienstwo '1'
 print(t)
@@ -26,16 +26,25 @@ print(seq)
 t = seq.count(1) / Max_Block  # prawdopodobienstwo '1' w bloku
 print(t)
 
-R = list()
-k = 1
-R.append(k)
-for n in range(0, Max_Block):
-    if x[n] != x[n+1]:
-        k += 1
-    R.append(k)
-print(R)
+zxc = ''.join([str(tempX) for tempX in x])
+tempR = list()
+for i in range(0, Max_Block):
+    ReturnIndex = zxc.find(zxc[0:i], i + 1)
+    tempR.append(ReturnIndex if ReturnIndex != -1 else N)  # czasami najdłuższe podciągi wypadają poza ciąg główny
 
-g1 = {i: abs(math.log(R[i - 1] / i, 2.)) for i in range(1, Max_Block + 1)}
+print(tempR)
+
+# Algorytm z pracy Cho - nieoptymalny w Pythonie
+# R = list()
+# k = 1
+# R.append(k)
+# for n in range(0, Max_Block - 1):
+#     if x[n] != x[n + 1]:
+#         k += 1
+#     R.append(k)
+# print(R)
+
+g1 = {i: abs(math.log(tempR[i - 1], 2.)) / i for i in range(1, Max_Block + 1)}
 print(g1)
 
 plt.plot(np.arange(1, Max_Block + 1, 1), list(g1.values()))
