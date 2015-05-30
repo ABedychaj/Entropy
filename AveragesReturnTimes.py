@@ -20,26 +20,24 @@ for i in range(1, N + 1):
 t = x.count(1) / N  # prawdopodobienstwo '1'
 print(t)
 
+zxc = ''.join([str(tempX) for tempX in x])
+
 S = 10
 M = N - Max_Block - S + 2
 print(M)
 
-# R = [[0 for x in range(0, Max_Block)] for x in range(0, S)]
-#
-# for s in range(0, S):
-#     R[s][0] = 1
-#
-# for s in range(0, S):
-#     for n in range(0, Max_Block):
-#         k = R[s][n]
-#         i = 1
-#         while i <= n and k <= M:
-#             if x[s + i - 1] == x[s + i - 1 + k]:
-#                 i += 1
-#             else:
-#                 k += 1
-#                 i = 1
-#         print(k)
-#         R[s][n] = k
-#
-# print(R)
+R = [list() for _ in range(0, S)]
+print(zxc[0:Max_Block])
+''' Szukamy pierwszego powrotu n-bloku od s-tego miejsca '''
+for i in range(0, S):
+    for b in range(0, Max_Block):
+        print("i" + str(i))
+        print("b" + str(b))
+        ReturnIndex = zxc.find(zxc[i:i + b + 1], i + b + 1)
+        print(zxc[i:i + b + 1])
+        print("ReturnIndex" + str(ReturnIndex))
+        if ReturnIndex != -1:
+            R[i].append(ReturnIndex)
+            print(R)
+        else:
+            break

@@ -28,8 +28,9 @@ print(t)
 
 zxc = ''.join([str(tempX) for tempX in x])
 tempR = list()
-for i in range(0, Max_Block):
-    ReturnIndex = zxc.find(zxc[0:i], i + 1)
+for i in range(0, Max_Block - 1):
+    ReturnIndex = zxc.find(zxc[0:i + 1], i + 1)
+    # print(zxc[0:i + 1])
     if ReturnIndex != -1:
         tempR.append(ReturnIndex)
     else:
