@@ -22,22 +22,24 @@ print(t)
 
 zxc = ''.join([str(tempX) for tempX in x])
 
-S = 10
+S = 1000
 M = N - Max_Block - S + 2
 print(M)
 
 R = [list() for _ in range(0, S)]
-print(zxc[0:Max_Block])
+AveragesOfR = [0 for _ in range(0, Max_Block)]
 ''' Szukamy pierwszego powrotu n-bloku od s-tego miejsca '''
 for i in range(0, S):
     for b in range(0, Max_Block):
-        print("i" + str(i))
-        print("b" + str(b))
         ReturnIndex = zxc.find(zxc[i:i + b + 1], i + b + 1)
-        print(zxc[i:i + b + 1])
-        print("ReturnIndex" + str(ReturnIndex))
         if ReturnIndex != -1:
             R[i].append(ReturnIndex)
-            print(R)
         else:
-            break
+            R[i].append(0)
+
+A = np.array(R)
+for i in range(0, Max_Block):
+    tempAve = [t for t in A[:, i] if t > 0]
+    AveragesOfR[i] = sum(tempAve) / len(tempAve)
+
+print(AveragesOfR)
