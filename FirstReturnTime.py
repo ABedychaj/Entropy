@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import math
 import random
 
-k = 1  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
+k = 4  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobieństwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
 print(entropy)
 
-Max_Block = 20  # maksymalny blok
+Max_Block = 30  # maksymalny blok
 N = round(2 ** (
     entropy * Max_Block))  # całkowita długość binarnego bloku x1x2x3... Istnieje szansa, że powrót nie pojawi się dla dużego bloku (bliskiego Max_Block) w próbce o długości N
 print(N)
@@ -30,7 +30,10 @@ zxc = ''.join([str(tempX) for tempX in x])
 tempR = list()
 for i in range(0, Max_Block):
     ReturnIndex = zxc.find(zxc[0:i], i + 1)
-    tempR.append(ReturnIndex if ReturnIndex != -1 else N)  # czasami najdłuższe podciągi wypadają poza ciąg główny
+    if ReturnIndex != -1:
+        tempR.append(ReturnIndex)
+    else:
+        break
 
 print(tempR)
 
@@ -44,10 +47,10 @@ print(tempR)
 #     R.append(k)
 # print(R)
 
-g1 = {i: abs(math.log(tempR[i - 1], 2.)) / i for i in range(1, Max_Block + 1)}
+g1 = {i: abs(math.log(tempR[i - 1], 2.)) / i for i in range(1, len(tempR))}
 print(g1)
 
-plt.plot(np.arange(1, Max_Block + 1, 1), list(g1.values()))
+plt.plot(np.arange(1, len(tempR), 1), list(g1.values()))
 plt.axhline(entropy, lw=2, color='black', label=str(entropy))
 plt.suptitle(''.join(str(b) for b in seq), fontsize=10)
 plt.ylabel('entropia')
