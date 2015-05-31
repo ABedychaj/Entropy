@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import math
 import random
 
-k = 3  # Przesuniecie Bernulliego (1/(k+1),4/(k+1));
+k = 7  # Przesuniecie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobienstwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
 print(entropy)
 
-Max_Block = 12  # maksymalny blok
+Max_Block = 25  # maksymalny blok
 N = round(2 ** (
     entropy * Max_Block)) * 200  # mnozymy * 200, gdyz dla duzych Max_Block powtorzenie moze sie nie pojawic.
 print(N)
@@ -42,4 +42,22 @@ for i in range(0, Max_Block):
     tempAve = [t for t in A[:, i] if t > 0]
     AveragesOfR[i] = sum(tempAve) / len(tempAve)
 
-print(AveragesOfR)
+g1 = {i: abs(math.log(AveragesOfR[i - 1], 2.)) / i for i in range(1, len(AveragesOfR))}
+print(g1)
+
+plt.plot(np.arange(1, len(AveragesOfR), 1), list(g1.values()))
+plt.axhline(entropy, lw=2, color='black', label=str(entropy))
+plt.ylabel('entropia')
+plt.xlabel('n')
+plt.legend()
+
+AveLog = [0 for _ in range(0, Max_Block)]
+for i in range(0, Max_Block):
+    tempAveLog = [t for t in A[:, i] if t > 0]
+    temp = [abs(math.log(tempAveLog[t], 2.)) / (i + 1) for t in range(0, len(tempAveLog))]
+    AveLog[i] = sum(temp) / len(temp)
+
+g2 = {i: AveLog[i] for i in range(1, len(AveLog))}
+print(g2)
+plt.plot(np.arange(1, len(AveLog), 1), list(g2.values()), color="red")
+plt.savefig('foo.png')
