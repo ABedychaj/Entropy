@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import math
 import random
 
-k = 7  # Przesuniecie Bernulliego (1/(k+1),4/(k+1));
+k = 4  # Przesuniecie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobienstwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
 print(entropy)
 
-Max_Block = 25  # maksymalny blok
+Max_Block = 15  # maksymalny blok
 N = round(2 ** (
     entropy * Max_Block)) * 200  # mnozymy * 200, gdyz dla duzych Max_Block powtorzenie moze sie nie pojawic.
 print(N)
@@ -22,7 +22,7 @@ print(t)
 
 zxc = ''.join([str(tempX) for tempX in x])
 
-S = 1000
+S = 5000
 M = N - Max_Block - S + 2
 print(M)
 
@@ -60,4 +60,4 @@ for i in range(0, Max_Block):
 g2 = {i: AveLog[i] for i in range(1, len(AveLog))}
 print(g2)
 plt.plot(np.arange(1, len(AveLog), 1), list(g2.values()), color="red")
-plt.savefig('foo.png')
+plt.savefig('AveTimes.png')
