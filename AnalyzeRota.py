@@ -7,26 +7,27 @@ import re
 pattern = re.compile('([^\s\w]|_)+')  # usuwamy wszystko poza bialymi znakami i literami/liczbami
 
 f = open('Rota.txt', 'r')
-#print(f.read())
+# print(f.read())
 
 ''' usuwamy znaki interpunkcyjne '''
 k = "".join(line for line in f if not line.isspace())
 k = pattern.sub('', k)
-print(len(k))
+dlugoscTekstu = len(k)
+print(dlugoscTekstu)
 
-Max_Block = 45
-S = 500
+Max_Block = 10
+S = 701
 R = [list() for _ in range(0, S)]
 AveragesOfR = [0 for _ in range(0, Max_Block)]
 
 ''' Szukamy pierwszego powrotu n-bloku od s-tego miejsca '''
 for i in range(0, S):
     for b in range(0, Max_Block):
-        ReturnIndex = k.find(k[i:i + b + 1], i + b + 1)
+        ReturnIndex = k.find(k[i:i + b + 1], i + 1)
         if ReturnIndex != -1:
-            R[i].append(ReturnIndex)
+            R[i].append(ReturnIndex - i)
         else:
-            R[i].append(0)
+            R[i].append(dlugoscTekstu)
 
 A = np.array(R)
 AveLog = [0 for _ in range(0, Max_Block)]

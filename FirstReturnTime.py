@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 import random
 
-k = 7  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
+k = 4  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobieństwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
 print(entropy)
