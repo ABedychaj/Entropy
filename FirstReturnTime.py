@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 import math
 import random
 
-k = 4  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
+k = 1  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobieństwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
 print(entropy)
 
-Max_Block = 30  # maksymalny blok
+Max_Block = 20  # maksymalny blok
 N = round(2 ** (
     entropy * Max_Block))  # całkowita długość binarnego bloku x1x2x3... Istnieje szansa, że powrót nie pojawi się dla dużego bloku (bliskiego Max_Block) w próbce o długości N
 print(N)
@@ -29,7 +29,7 @@ print(t)
 zxc = ''.join([str(tempX) for tempX in x])
 tempR = list()
 for i in range(0, Max_Block - 1):
-    ReturnIndex = zxc.find(zxc[0:i + 1], i + 1)
+    ReturnIndex = zxc.find(zxc[0:i + 1], 1)
     # print(zxc[0:i + 1])
     if ReturnIndex != -1:
         tempR.append(ReturnIndex)
