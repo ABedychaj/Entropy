@@ -7,19 +7,25 @@ import re
 
 pattern = re.compile('([^\s\w]|_)+')  # usuwamy wszystko poza bialymi znakami i literami/liczbami
 
-f = open('PanTadeusz.txt', 'r')
+f = open('Gajcy', 'r')
 # print(f.read())
 
 ''' usuwamy znaki interpunkcyjne '''
 k = "".join(line for line in f if not line.isspace())
 k = pattern.sub('', k)
 binary = ' '.join(format(ord(x), 'b') for x in k).replace(' ', '') # tlumaczymy tekst na binarny
-print(binary)
+#print(binary)
 dlugoscTekstu = len(binary)
 print(dlugoscTekstu)
 
-Max_Block = 150
-S = 5000
+prob = binary.count('1') / dlugoscTekstu
+entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
+print(prob)
+print(entropy)
+print(abs(math.log(dlugoscTekstu, 2.*entropy)))
+
+Max_Block = math.ceil(abs(math.log(dlugoscTekstu, 2.*entropy)))
+S = 20000
 R = [list() for _ in range(0, S)]
 AveragesOfR = [0 for _ in range(0, Max_Block)]
 
