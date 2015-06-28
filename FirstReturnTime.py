@@ -4,24 +4,26 @@ import math
 import random
 import time
 
-k = 1  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
+k = 5  # Przesunięcie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobieństwo symbolu '1';
-entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
+entropy = -(1. - prob) * math.log(1. - prob, 2.) \
+          - prob * math.log(prob, 2.)
 
-f = open(''.join(['FirstTime', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.log']), 'w')
+f = open(''.join(['FirstReturnTime/FirstTime', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.log']), 'w')
 print(entropy, file=f)
 
-Max_Block = 25  # maksymalny blok
+Max_Block = 15 # maksymalny blok
 N = round(2 ** (
-    entropy * Max_Block))  # całkowita długość binarnego bloku x1x2x3... Istnieje szansa, że powrót nie pojawi się dla dużego bloku (bliskiego Max_Block) w próbce o długości N
+    entropy * Max_Block))  # całkowita długość binarnego bloku x1x2x3...
+                           # Istnieje szansa, że powrót nie pojawi się dla dużego bloku (bliskiego Max_Block) w próbce o długości N
 print(N, file=f)
 
 x = list()  # generowanie ciągu Bernulliego
 for i in range(1, N + 1):
     x.append(math.trunc(random.randint(0, k) / k))
 
-t = x.count(1) / N  # prawdopodobienstwo '1'
-print(t, file=f)
+empiricalProb = x.count(1) / N  # prawdopodobienstwo '1'
+print(empiricalProb, file=f)
 
 seq = x[0: Max_Block]
 print(seq, file=f)
@@ -29,11 +31,12 @@ print(seq, file=f)
 t = seq.count(1) / Max_Block  # prawdopodobienstwo '1' w bloku
 print(t, file=f)
 
-zxc = ''.join([str(tempX) for tempX in x])
+fullBinarySeries = ''.join([str(tempX) for tempX in x])
 tempR = list()
 for i in range(0, Max_Block - 1):
-    ReturnIndex = zxc.find(zxc[0:i + 1], 1)
-    # print(zxc[0:i + 1])
+    ReturnIndex = fullBinarySeries.find(fullBinarySeries[0:i + 1],
+                                        1)
+    # print(fullBinarySeries[0:i + 1])
     if ReturnIndex != -1:
         tempR.append(ReturnIndex)
     else:
@@ -51,15 +54,15 @@ print(tempR, file=f)
 #     R.append(k)
 # print(R)
 
-g1 = {i: abs(math.log(tempR[i - 1], 2.)) / i for i in range(1, len(tempR))}
+g1 = {i: abs(math.log(tempR[i - 1], 2.)) / i
+      for i in range(1, len(tempR))}
 print(g1, file=f)
 
 plt.plot(np.arange(1, len(tempR), 1), list(g1.values()))
 plt.axhline(entropy, lw=2, color='black', label=str(entropy))
-plt.suptitle(''.join(str(b) for b in seq), fontsize=10)
-plt.suptitle(''.join(str(b) for b in seq), fontsize=10)
+# plt.suptitle(''.join(str(b) for b in seq), fontsize=6)
 plt.ylabel('entropia')
 plt.xlabel('n')
-plt.legend()
-plt.savefig(''.join(['FirstTime', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.png']))
+plt.legend(loc='best')
+plt.savefig(''.join(['FirstReturnTime/FirstTime', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.png']))
 f.close()
