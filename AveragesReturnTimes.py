@@ -4,62 +4,72 @@ import math
 import random
 import time
 
-k = 5  # Przesuniecie Bernulliego (1/(k+1),4/(k+1));
+k = 7  # Przesuniecie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobienstwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
-print(entropy)
 
-Max_Block = 25  # maksymalny blok
+f = open(''.join(['AvReturnTime/AveTimes', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.log']), 'w')
+print(entropy, file=f)
+
+Max_Block = 30  # maksymalny blok
 N = round(2 ** (
     entropy * Max_Block)) * 200  # mnozymy * 200, gdyz dla duzych Max_Block powtorzenie moze sie nie pojawic.
-print(N)
+print(N, file=f)
 
 x = list()  # generowanie ciagu Bernulliego
 for i in range(1, N + 1):
     x.append(math.trunc(random.randint(0, k) / k))
 
 t = x.count(1) / N  # prawdopodobienstwo '1'
-print(t)
+print(t, file=f)
 
-zxc = ''.join([str(tempX) for tempX in x])
+binarySeries = ''.join([str(tempX) for tempX in x])
 
 S = 1000
 M = N - Max_Block - S + 2
-print(M)
+print(M, file=f)
 
 R = [list() for _ in range(0, S)]
-AveragesOfR = [0 for _ in range(0, Max_Block)]
 ''' Szukamy pierwszego powrotu n-bloku od s-tego miejsca '''
 for i in range(0, S):
     for b in range(0, Max_Block):
-        ReturnIndex = zxc.find(zxc[i:i + b + 1], i + 1)
+        ReturnIndex = binarySeries.find(binarySeries[i:i + b + 1], i + 1)
         if ReturnIndex != -1:
             R[i].append(ReturnIndex - i)
         else:
-            # print(b)
-            R[i].append(N)
+            break
 
-A = np.array(R)
+AveragesOfR = [0 for _ in range(0, Max_Block)]
 for i in range(0, Max_Block):
-    tempAve = [t for t in A[:, i] if t > 0]
+    tempAve = list()
+    for j in range(0, S):
+        if len(R[j]) > i:
+            tempAve.append(R[j][i])
     AveragesOfR[i] = sum(tempAve) / len(tempAve)
 
 g1 = {i: abs(math.log(AveragesOfR[i - 1], 2.)) / i for i in range(1, len(AveragesOfR))}
-print(g1)
+print(g1, file=f)
 
-plt.plot(np.arange(1, len(AveragesOfR), 1), list(g1.values()))
+plt.plot(np.arange(1, len(AveragesOfR), 1), list(g1.values()), label='logarytm srednich')
 plt.axhline(entropy, lw=2, color='black', label=str(entropy))
 plt.ylabel('entropia')
 plt.xlabel('n')
-plt.legend()
+
 
 AveLog = [0 for _ in range(0, Max_Block)]
 for i in range(0, Max_Block):
-    tempAveLog = [t for t in A[:, i] if t > 0]
+    tempAveLog = list()
+    for j in range(0, S):
+        if len(R[j]) > i:
+            tempAveLog.append(R[j][i])
     temp = [abs(math.log(tempAveLog[t], 2.)) / (i + 1) for t in range(0, len(tempAveLog))]
-    AveLog[i] = sum(temp) / len(temp)
+    if sum(temp) == 0 or len(temp) == 0:
+        continue
+    else:
+        AveLog[i] = sum(temp) / len(temp)
 
 g2 = {i: AveLog[i] for i in range(1, len(AveLog))}
-print(g2)
-plt.plot(np.arange(1, len(AveLog), 1), list(g2.values()), color="red")
-plt.savefig(''.join(['AveTimes', str(int(time.time())), '.png']))
+print(g2, file=f)
+plt.plot(np.arange(1, len(AveLog), 1), list(g2.values()), color="red", label='srednie logarytmu')
+plt.legend(loc='best')
+plt.savefig(''.join(['AvReturnTime/AveTimes', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.png']))
