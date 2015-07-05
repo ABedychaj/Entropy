@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+import requests
+from bs4 import BeautifulSoup
+import re
+
+
+def epika_spider(max_pages=2):
+    page = 1
+    while page < max_pages:
+        url = 'http://wolnelektury.pl/katalog/rodzaj/epika/?page=' + str(page)
+        source_code = requests.get(url)
+        plain_text = source_code.text
+        soup = BeautifulSoup(plain_text, "html.parser")
+        href = list()
+        for elem in soup(text=re.compile(r'TXT')):
+            OnlyPolishTexts = elem.parent.parent.parent.parent.parent.parent
+            if str(OnlyPolishTexts).find(u'Język:') == -1:
+                href.append('https://wolnelektury.pl' + elem.parent.get('href'))
+        print(href)
+        page += 1
+        get_text(href)
+
+
+def get_text(href_list):
+    for href in href_list:
+        source_code = requests.get(href)
+        LastSign = source_code.text.rfind('-----')
+        groups = re.search('txt/(.*)\.txt', href, flags=0)
+        # f = open(''.join(['Test/', groups.group(1), '.txt']), 'w', encoding='utf-8')
+        f = open(''.join(['H:/Teksty/Epika/', groups.group(1), '.txt']), 'w', encoding='utf-8')
+        # text_to_file = "".join(line for line in source_code.text if not line.isspace())
+        for t in range(0, LastSign):
+            f.write(source_code.text[t])
+
+
+epika_spider(55)

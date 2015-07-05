@@ -9,13 +9,14 @@ prob = 1. / (k + 1)  # Prawdopodobieństwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) \
           - prob * math.log(prob, 2.)
 
-f = open(''.join(['FirstReturnTime/FirstTime', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.log']), 'w')
+f = open(''.join(['FirstReturnTime/FirstTime', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.log']),
+         'w')
 print(entropy, file=f)
 
-Max_Block = 15 # maksymalny blok
+Max_Block = 15  # maksymalny blok
 N = round(2 ** (
     entropy * Max_Block))  # całkowita długość binarnego bloku x1x2x3...
-                           # Istnieje szansa, że powrót nie pojawi się dla dużego bloku (bliskiego Max_Block) w próbce o długości N
+# Istnieje szansa, że powrót nie pojawi się dla dużego bloku (bliskiego Max_Block) w próbce o długości N
 print(N, file=f)
 
 x = list()  # generowanie ciągu Bernulliego
@@ -64,5 +65,8 @@ plt.axhline(entropy, lw=2, color='black', label=str(entropy))
 plt.ylabel('entropia')
 plt.xlabel('n')
 plt.legend(loc='best')
-plt.savefig(''.join(['FirstReturnTime/FirstTime', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.png']))
+plt.savefig(''.join(['FirstReturnTime/FirstTime',
+                     'Prawdopodobienstwo1_',
+                     str(prob), '_', str(int(time.time())),
+                     '.png']))
 f.close()

@@ -4,17 +4,18 @@ import math
 import random
 import time
 
-k = 7  # Przesuniecie Bernulliego (1/(k+1),4/(k+1));
+k = 9  # Przesuniecie Bernulliego (1/(k+1),4/(k+1));
 prob = 1. / (k + 1)  # Prawdopodobienstwo symbolu '1';
 entropy = -(1. - prob) * math.log(1. - prob, 2.) - prob * math.log(prob, 2.)
 
 f = open(''.join(['AvReturnTime/AveTimes', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.log']), 'w')
 print(entropy, file=f)
 
-Max_Block = 30  # maksymalny blok
+Max_Block = 20  # maksymalny blok
 N = round(2 ** (
     entropy * Max_Block)) * 200  # mnozymy * 200, gdyz dla duzych Max_Block powtorzenie moze sie nie pojawic.
 print(N, file=f)
+print(N)
 
 x = list()  # generowanie ciagu Bernulliego
 for i in range(1, N + 1):
@@ -25,7 +26,7 @@ print(t, file=f)
 
 binarySeries = ''.join([str(tempX) for tempX in x])
 
-S = 1000
+S = 5000
 M = N - Max_Block - S + 2
 print(M, file=f)
 
@@ -38,6 +39,7 @@ for i in range(0, S):
             R[i].append(ReturnIndex - i)
         else:
             break
+            #R[i].append(N)
 
 AveragesOfR = [0 for _ in range(0, Max_Block)]
 for i in range(0, Max_Block):
@@ -47,10 +49,11 @@ for i in range(0, Max_Block):
             tempAve.append(R[j][i])
     AveragesOfR[i] = sum(tempAve) / len(tempAve)
 
-g1 = {i: abs(math.log(AveragesOfR[i - 1], 2.)) / i for i in range(1, len(AveragesOfR))}
+g1 = {i: abs(math.log(AveragesOfR[i - 1], 2.)) / i
+      for i in range(1, len(AveragesOfR))}
 print(g1, file=f)
 
-plt.plot(np.arange(1, len(AveragesOfR), 1), list(g1.values()), label='logarytm srednich')
+plt.plot(np.arange(1, len(AveragesOfR), 1), list(g1.values()), label='logarytm srednich', lw=3)
 plt.axhline(entropy, lw=2, color='black', label=str(entropy))
 plt.ylabel('entropia')
 plt.xlabel('n')
@@ -62,7 +65,8 @@ for i in range(0, Max_Block):
     for j in range(0, S):
         if len(R[j]) > i:
             tempAveLog.append(R[j][i])
-    temp = [abs(math.log(tempAveLog[t], 2.)) / (i + 1) for t in range(0, len(tempAveLog))]
+    temp = [abs(math.log(tempAveLog[t], 2.)) / (i + 1)
+            for t in range(0, len(tempAveLog))]
     if sum(temp) == 0 or len(temp) == 0:
         continue
     else:
@@ -70,6 +74,6 @@ for i in range(0, Max_Block):
 
 g2 = {i: AveLog[i] for i in range(1, len(AveLog))}
 print(g2, file=f)
-plt.plot(np.arange(1, len(AveLog), 1), list(g2.values()), color="red", label='srednie logarytmu')
+plt.plot(np.arange(1, len(AveLog), 1), list(g2.values()), color="red", label='srednie logarytmu', lw=3)
 plt.legend(loc='best')
 plt.savefig(''.join(['AvReturnTime/AveTimes', 'Prawdopodobienstwo1_', str(prob), '_', str(int(time.time())), '.png']))
