@@ -26,11 +26,12 @@ def get_text(href_list):
         source_code = requests.get(href)
         LastSign = source_code.text.rfind('-----')
         groups = re.search('txt/(.*)\.txt', href, flags=0)
-        # f = open(''.join(['Test/', groups.group(1), '.txt']), 'w', encoding='utf-8')
-        f = open(''.join(['H:/Teksty/Epika/', groups.group(1), '.txt']), 'w', encoding='utf-8')
+        # f = open(''.join(['TestLiryka32litery/', groups.group(1), '.txt']), 'w', encoding='utf-8')
+        f = open(''.join(['H:/Teksty/EpikaTest1/', groups.group(1), '.txt']), 'w', encoding='utf-8')
         # text_to_file = "".join(line for line in source_code.text if not line.isspace())
-        for t in range(0, LastSign):
-            f.write(source_code.text[t])
+        #for t in range(0, LastSign):
+        # print(LastSign)
+        f.write(source_code.text[0:LastSign])
 
 
 epika_spider(55)
