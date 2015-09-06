@@ -22,7 +22,7 @@ for tekst in Teksty:
     f = open(''.join(['TestEpika32litery/', helper.group(1), '.log']), 'w')
     ''' usuwamy znaki interpunkcyjne '''
     k = "".join(line for line in toAnalyze if not line.isspace())
-    k = k.lower() #wielkość liter ma znaczenie, więc spróbujmy najpierw ujednolicenia
+    k = k.lower()  # wielkość liter ma znaczenie, więc spróbujmy najpierw ujednolicenia
     k = pattern.sub('', k)
     # if helper.group(1) == 'confiteor':
     #     print(k)
@@ -33,13 +33,15 @@ for tekst in Teksty:
     print(dlugoscTekstu, file=f)
 
     prob = [k.count(str(t)) / dlugoscTekstu for t in polishAlphabet]
-    entropy = sum([0 if t == 0 else -t * math.log(t, len(polishAlphabet)) for t in prob])
+    entropy = sum([0 if t == 0 else -t * math.log(t, len(polishAlphabet))
+                   for t in prob])
     print(prob, file=f)
     print(entropy, file=f)
     print(abs(math.log(dlugoscTekstu, len(polishAlphabet) * entropy)), file=f)
 
-    Max_Block = math.ceil(abs(math.log(dlugoscTekstu, len(polishAlphabet) * entropy)))
-    # Max_Block = 15
+    Max_Block = math.ceil(abs(math.log(dlugoscTekstu,
+                                       len(polishAlphabet) * entropy)))
+    Max_Block = 10
     S = 5000
     R = [list() for _ in range(0, S)]
     AveragesOfR = [0 for _ in range(0, Max_Block)]
@@ -77,7 +79,8 @@ for tekst in Teksty:
         for j in range(0, S):
             if len(R[j]) > i:
                 tempAveLog.append(R[j][i])
-        temp = [abs(math.log(tempAveLog[t], len(polishAlphabet))) / (i + 1) for t in range(0, len(tempAveLog))]
+        temp = [abs(math.log(tempAveLog[t], len(polishAlphabet)))
+                / (i + 1) for t in range(0, len(tempAveLog))]
         if sum(temp) == 0 or len(temp) == 0:
             AveLog = AveLog[0:i - 1]
             continue
@@ -96,7 +99,7 @@ for tekst in Teksty:
     LogAvgEntropy.append(g1[1 if len(g1) == 1 else len(g1) - 1])
     f.close()
 
-newFile = open(''.join(['TestEpika32litery.log']), 'w')
+newFile = open(''.join(['TestEpika32litery', str(Max_Block), '.log']), 'w')
 print(np.arange(1, len(AvgEntropy), 1))
 print(AvgEntropy, file=newFile)
 print(LogAvgEntropy, file=newFile)
@@ -105,6 +108,6 @@ plt.plot(np.arange(0, len(LogAvgEntropy), 1), LogAvgEntropy, label='logarytm sre
 plt.ylabel('entropia')
 plt.xlabel('n')
 plt.legend(loc='best')
-plt.savefig(''.join(['TestEpika32litery.png']))
+plt.savefig(''.join(['TestEpika32litery', str(Max_Block), '.png']))
 plt.close('all')
 newFile.close()
